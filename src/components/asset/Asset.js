@@ -1,0 +1,125 @@
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { UserOutlined, CaretDownOutlined } from '@ant-design/icons';
+import PropTypes from 'prop-types';
+
+import {
+  Card,
+  CardImage,
+  AssetDescription as Description,
+  Text,
+  PriceContainer,
+  Price,
+  ContentContainer,
+  StyledAvatar,
+  DropDownContainer,
+  MintNumberContainer,
+  MintNumber
+} from './styled';
+import { PlaceholderSkeletonImg } from '~/components/shared/CardStyled';
+
+import { getImageURL } from '~/utils/getImageUrl';
+import { getProfile } from '~/flow/getProfile';
+import formatPrice from '~/utils/formatPrice';
+import { URLs } from '~/routes/urls';
+import DropDown from '~/components/dropdown/DropDown';
+
+const Asset = ({
+  imgURL,
+  description,
+  name,
+  price,
+  owner,
+  id,
+  actions,
+  linkTo,
+  mintNumber,
+  showOwner = false
+}) => {
+  const [imageSrc, setImageSrc] = useState(null);
+  const [isImageLoading, setImageLoading] = useState(true);
+
+  async function getImage() {
+    const ownerInfo = await getProfile(owner);
+
+    setImageSrc(ownerInfo.avatar);
+  }
+
+  useEffect(() => {
+    showOwner && getImage();
+  }, []);
+
+  const avatarSource = imageSrc ? { src: imageSrc } : { icon: <UserOutlined /> };
+  const Component = (
+    <Card className="token-card">
+      <MintNumberContainer justify={showOwner ? 'space-between' : 'end'} align="middle">
+        {showOwner && owner && <StyledAvatar size="small" {...avatarSource} />}
+        {mintNumber && <MintNumber>{`#${mintNumber}`}</MintNumber>}
+      </MintNumberContainer>
+      {isImageLoading && <PlaceholderSkeletonImg shape="square" active />}
+      <CardImage
+        width={193}
+        height={182}
+        layout={undefined}
+        src={getImageURL(imgURL ?? '')}
+        unoptimized={true}
+        onLoad={() => setImageLoading(false)}
+      />
+      <div className="text-content">
+        <ContentContainer fullWidth={!price}>
+          <Text>{name}</Text>
+          <Description ellipsis={{ rows: 2 }}>{description}</Description>
+        </ContentContainer>
+        {price && (
+          <PriceContainer>
+            <Image src="/images/flow-black.png" width={20} height={20} object-fit="contain" />
+            <Price>{formatPrice(price)}</Price>
+          </PriceContainer>
+        )}
+      </div>
+      {actions && actions.length > 0 && (
+        <DropDownContainer>
+          <DropDown title="actions" options={actions} icon={<CaretDownOutlined />} />
+        </DropDownContainer>
+      )}
+    </Card>
+  );
+
+  return id ? <Link href={linkTo ?? URLs.explorer(id)}>{Component}</Link> : Component;
+};
+
+Asset.propTypes = {
+  imgURL: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  id: PropTypes.number,
+  price: PropTypes.number,
+  owner: PropTypes.shape({
+    src: PropTypes.string
+  }),
+  showSell: PropTypes.bool,
+  showCancel: PropTypes.bool,
+  sell: PropTypes.func,
+  cancel: PropTypes.func,
+  actions: PropTypes.arrayOf(
+    PropTypes.shape({
+      title: PropTypes.string,
+      action: PropTypes.func
+    })
+  ),
+  linkTo: PropTypes.string,
+  showOwner: PropTypes.bool
+};
+
+Asset.defaultProps = {
+  showSell: false,
+  showCancel: false,
+  showOwner: false,
+  id: null,
+  owner: null,
+  actions: null,
+  linkTo: null
+};
+
+export default Asset;
