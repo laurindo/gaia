@@ -57,6 +57,7 @@ function UserMenuContent({ loggedIn }) {
           <Menu>
             <Menu.Item onClick={() => handleGoToEditProfile()}>Edit Profile</Menu.Item>
             <Menu.Item onClick={logout}>Logout</Menu.Item>
+            <Menu.Item>Teste</Menu.Item>
           </Menu>
         </ColStyled>
       </Row>
