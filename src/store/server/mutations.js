@@ -1,5 +1,13 @@
 import gql from 'graphql-tag';
 
+export const FUSD_FAUCET = gql`
+  mutation fusdFaucet($receiver: String, $amount: bigint) {
+    fusdFaucet(arg1: { amount: $amount, receiver: $receiver }) {
+      errors
+    }
+  }
+`;
+
 export const CREATE_TEMPLATE = gql`
   mutation createTemplate($metadata: json!, $id: bigint!, $recipientAddr: String!) {
     createTemplate(arg1: { metadata: $metadata, setID: $id, recipientAddr: $recipientAddr }) {
