@@ -1,4 +1,4 @@
-import { Menu, Row, Modal, notification, Spin, Input, InputNumber, Form, Col } from 'antd';
+import { Menu, Row, Modal, notification, Spin, Input, Form, Col } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { setupAccount } from '~/flow/setupAccount';
@@ -8,13 +8,14 @@ import { URLs } from '~/routes/urls';
 import { ColStyled } from '~/components/header/styled';
 import { useMutation } from '@apollo/react-hooks';
 import { FUSD_FAUCET } from '~/store/server/mutations';
+import { getFUSDBalance } from '~/flow/getFusdBalance';
 
 function UserMenuContent({ loggedIn }) {
   const [form] = Form.useForm();
   const { user, logout } = useAuth();
   const [formData, setFormData] = useState({
     receiver: '',
-    amount: ''
+    amount: 1
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [openModalFlow, setOpenModalFlow] = useState(false);
@@ -58,6 +59,8 @@ function UserMenuContent({ loggedIn }) {
           amount: formData.amount
         }
       });
+      const result = await getFUSDBalance(user?.addr);
+      alert(result);
       notification.open({
         key: `faucet_usd`,
         type: 'success',
@@ -150,9 +153,10 @@ function UserMenuContent({ loggedIn }) {
           <Form.Item label="Amount" name="amount" rules={[{ required: true }]}>
             <Row>
               <Col span={12}>
-                <InputNumber
+                <Input
                   min={1}
                   max={50}
+                  defaultValue={1}
                   onChange={handleInputChange}
                   maxLength="2"
                   placeholder="input your amount"
