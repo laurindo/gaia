@@ -5,11 +5,12 @@ import CardStyled, {
 } from '~/components/shared/CardStyled';
 import React from 'react';
 
-export const CardLoading = ({ key, hasTopBar }) => {
+export const CardLoading = ({ hasTopBar }) => {
   return (
     <Col>
       <CardStyled
-        skeleton
+        $skeleton
+        hoverable
         className="token-card"
         title={
           hasTopBar && (
@@ -18,9 +19,7 @@ export const CardLoading = ({ key, hasTopBar }) => {
             </Col>
           )
         }
-        cover={<PlaceholderSkeletonImg shape="square" active />}
-        hoverable
-        key={key}>
+        cover={<PlaceholderSkeletonImg shape="square" active />}>
         <Space direction="vertical">
           <PlaceholderSkeleton paragraph={false} title={{ width: '40%' }} active />
 

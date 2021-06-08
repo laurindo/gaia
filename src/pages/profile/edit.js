@@ -22,7 +22,7 @@ import {
 import Seo from '~/components/seo/seo';
 
 const EditProfile = () => {
-  const { shouldPageBlock } = useBlockPage();
+  const shouldPageBlock = useBlockPage();
   const { user } = useAuth();
   const { userProfile } = useProfile(user?.addr);
   const [state, setState] = useState({

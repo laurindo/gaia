@@ -50,12 +50,13 @@ export const GET_NFT = gql`
         template_id
         metadata
       }
-      sale_offers {
+      sale_offers(where: { status: { _eq: "active" } }) {
         status
         id
         price
         nft {
           owner
+
           asset_id
         }
       }

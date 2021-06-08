@@ -1,11 +1,11 @@
 import { fcl, t } from '../config/config';
 
 const CHECK_SETUP_TX = fcl.cdc`
-import FlowAssets from 0xNFTContract
+import Gaia from 0xNFTContract
 
 pub fun main(address: Address): Bool {
         
-  return FlowAssets.checkSetup(address)
+  return Gaia.checkSetup(address)
 }
 `;
 

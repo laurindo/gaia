@@ -24,7 +24,7 @@ import { URLs } from '~/routes/urls';
 import useAuth from '~/hooks/useAuth';
 
 const FormComponent = ({ onSubmit, loading }) => {
-  const { shouldPageBlock } = useBlockPage();
+  const shouldPageBlock = useBlockPage();
   const [, forceUpdate] = useState({});
   const [form] = Form.useForm();
   const formValues = form.getFieldsValue();

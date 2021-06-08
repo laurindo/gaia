@@ -38,15 +38,20 @@ import {
 import Seo from '~/components/seo/seo';
 import UserInfo from '~/components/userInfo/UserInfo';
 import AssetInfo from '~/components/assetInfo/AssetInfo';
+
 import useAuth from '~/hooks/useAuth';
+import useBalance from '~/hooks/useBalance';
+import { getImageURL } from '~/utils/getImageUrl';
+import { URLs } from '~/routes/urls';
+
 import { cancelSale } from '~/flow/cancelSale';
 import { getProfile } from '~/flow/getProfile';
 import { buy } from '~/flow/buy';
-import { getImageURL } from '~/utils/getImageUrl';
-import { URLs } from '~/routes/urls';
-import { GET_NFT } from '~/store/server/subscriptions';
-import { UPDATE_OWNER, INSERT_SALE_OFFER } from '~/store/server/mutations';
 import { createSaleOffer } from '~/flow/sell';
+
+import { GET_NFT } from '~/store/server/subscriptions';
+import { checkAndInsertSale } from '~/utils/graphql';
+import { UPDATE_OWNER, INSERT_SALE_OFFER } from '~/store/server/mutations';
 
 const { Text } = Typography;
 
@@ -66,6 +71,8 @@ const Sale = () => {
 
   const [form] = Form.useForm();
   const { user } = useAuth();
+
+  const { updateUser } = useBalance();
 
   useSubscription(GET_NFT, {
     variables: {
@@ -101,8 +108,6 @@ const Sale = () => {
   });
   const [updateOwner] = useMutation(UPDATE_OWNER);
 
-  const [insertSaleOffer] = useMutation(INSERT_SALE_OFFER);
-
   const description = useMemo(() => {
     if (completeDescription || asset?.description?.length < 330) {
       return asset?.description;
@@ -129,6 +134,7 @@ const Sale = () => {
           owner: user?.addr
         }
       });
+      updateUser();
       notification.open({
         key: `buy_sale_${saleId}`,
         type: 'success',
@@ -348,13 +354,8 @@ const Sale = () => {
       });
       // createSaleOffer(ASSET_ID, PRICE, MARKET_FEE, TEMPLATE_ID)
       await createSaleOffer(asset?.asset_id, price, asset?.template_id);
-      insertSaleOffer({
-        variables: {
-          price: price.toFixed(8),
-          nft_id: asset?.id,
-          status: 'active'
-        }
-      });
+      // checkAndInsertSale(ASSET_ID, DATABASE ID, PRICE)
+      await checkAndInsertSale(asset?.asset_id, asset?.id, price);
       notification.open({
         key: `sale_${asset?.asset_id}`,
         type: 'success',
@@ -362,6 +363,7 @@ const Sale = () => {
         description: `Your sale offer for ID #${asset?.asset_id} is created`
       });
     } catch (err) {
+      console.warn(err);
       notification.open({
         key: `sale_${asset?.asset_id}`,
         type: 'error',

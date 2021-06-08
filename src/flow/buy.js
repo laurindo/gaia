@@ -3,20 +3,20 @@ import { fcl, t } from '../config/config';
 const BUY_NFT_TX = fcl.cdc`
 import FungibleToken from 0xFungibleToken
 import NonFungibleToken from 0xNFTInterface
-import FlowAssets from 0xNFTContract
+import Gaia from 0xNFTContract
 import FUSD from 0xFUSDContract
-import FlowAssetsMarket from 0xNFTMarket
+import GaiaMarket from 0xNFTMarket
 
 transaction(saleAssetID: UInt64, address: Address) {
     let paymentVault: @FungibleToken.Vault
-    let AssetsCollection: &FlowAssets.Collection{NonFungibleToken.Receiver}
-    let marketCollection: &FlowAssetsMarket.Collection{FlowAssetsMarket.CollectionPublic}
+    let AssetsCollection: &Gaia.Collection{NonFungibleToken.Receiver}
+    let marketCollection: &GaiaMarket.Collection{GaiaMarket.CollectionPublic}
 
     prepare(signer: AuthAccount) {
         let FUSDVaultStoragePath = /storage/fusdVault
 
         self.marketCollection = getAccount(address)
-                    .getCapability<&FlowAssetsMarket.Collection{FlowAssetsMarket.CollectionPublic}>(FlowAssetsMarket.CollectionPublicPath).borrow()
+                    .getCapability<&GaiaMarket.Collection{GaiaMarket.CollectionPublic}>(GaiaMarket.CollectionPublicPath).borrow()
                     ?? panic("Could not borrow capability from public collection")
 
         let saleItem = self.marketCollection.borrowSaleItem(itemID: saleAssetID)
@@ -27,8 +27,8 @@ transaction(saleAssetID: UInt64, address: Address) {
             ?? panic("Cannot borrow FlowToken vault from acct storage")
         self.paymentVault <- mainFUSDVault.withdraw(amount: price)
 
-        self.AssetsCollection = signer.borrow<&FlowAssets.Collection{NonFungibleToken.Receiver}>(
-            from: FlowAssets.CollectionStoragePath
+        self.AssetsCollection = signer.borrow<&Gaia.Collection{NonFungibleToken.Receiver}>(
+            from: Gaia.CollectionStoragePath
         ) ?? panic("Cannot borrow Assets collection receiver from acct")
     }
 

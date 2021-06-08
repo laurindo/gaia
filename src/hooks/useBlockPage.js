@@ -6,8 +6,8 @@ export default () => {
   const context = useContext(AuthContext);
 
   if (!context) {
-    throw new Error('useBlockPage must be within a AuthProvider');
+    throw new Error('useBlockPage must be within an AuthProvider');
   }
 
-  return context;
+  return context.shouldPageBlock;
 };

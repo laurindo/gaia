@@ -16,7 +16,7 @@ import { GET_TEMPLATES } from '~/store/server/subscriptions';
 import { MINT } from '~/store/server/mutations';
 
 function Templates() {
-  const { shouldPageBlock } = useBlockPage();
+  const shouldPageBlock = useBlockPage();
   const { user } = useAuth();
   const router = useRouter();
   const { query, push } = router;

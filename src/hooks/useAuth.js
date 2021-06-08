@@ -6,7 +6,7 @@ import { getFUSDBalance } from '~/flow/getFusdBalance';
 export default function useAuth() {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+  const updateUser = () =>
     fcl.currentUser().subscribe(async u => {
       if (u?.addr) {
         let flowBalance = await getFlowBalance(u?.addr);
@@ -18,10 +18,14 @@ export default function useAuth() {
         setUser(null);
       }
     });
+
+  useEffect(() => {
+    updateUser();
   }, []);
 
   return {
     user,
+    updateUser,
     login: fcl.logIn,
     logout: fcl.unauthenticate,
     signup: fcl.signUp

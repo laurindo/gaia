@@ -1,5 +1,13 @@
 import gql from 'graphql-tag';
 
+export const FUSD_FAUCET = gql`
+  mutation FUSDfaucet($receiver: String!, $amount: bigint!) {
+    FUSDfaucet(arg1: { amount: $amount, receiver: $receiver }) {
+      errors
+    }
+  }
+`;
+
 export const CREATE_TEMPLATE = gql`
   mutation createTemplate($metadata: json!, $id: bigint!, $recipientAddr: String!) {
     createTemplate(arg1: { metadata: $metadata, setID: $id, recipientAddr: $recipientAddr }) {
@@ -48,6 +56,14 @@ export const UPDATE_OWNER = gql`
   }
 `;
 
+export const UPDATE_IS_FOR_SALE = gql`
+  mutation updateIsForSale($id: uuid!, $is_for_sale: Boolean!) {
+    update_nft_by_pk(pk_columns: { id: $id }, _set: { is_for_sale: $is_for_sale }) {
+      is_for_sale
+    }
+  }
+`;
+
 export const INSERT_SALE_OFFER = gql`
   mutation createSaleOffer($price: String!, $nft_id: uuid!, $status: String!) {
     insert_nft_sale_offer_one(object: { price: $price, nft_id: $nft_id, status: $status }) {
@@ -57,6 +73,20 @@ export const INSERT_SALE_OFFER = gql`
       price
       status
       updated_at
+    }
+  }
+`;
+export const EDIT_SALE_OFFER = gql`
+  mutation editSaleOffer($asset_id: bigint!, $price: String!, $standard: String!) {
+    update_nft_sale_offer(
+      where: { nft: { asset_id: { _eq: $asset_id }, _and: { standard: { _eq: $standard } } } }
+      _set: { price: $price, status: "active" }
+    ) {
+      returning {
+        nft {
+          id
+        }
+      }
     }
   }
 `;

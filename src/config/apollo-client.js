@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, split, HttpLink, ApolloLink, concat } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { WebSocketLink } from '@apollo/client/link/ws';
-
+import { GraphQLClient } from 'graphql-request';
 const cache = new InMemoryCache();
 
 const httpLink = new HttpLink({
@@ -47,5 +47,11 @@ const client = new ApolloClient({
   link,
   cache
 });
+
+export const gqlClient = new GraphQLClient(process.env.NEXT_PUBLIC_API_URL);
+
+if (process.env.NEXT_PUBLIC_API_SECRET) {
+  gqlClient.setHeader('x-hasura-admin-secret', process.env.NEXT_PUBLIC_API_SECRET);
+}
 
 export default client;

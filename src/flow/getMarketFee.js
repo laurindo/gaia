@@ -2,19 +2,19 @@ import { fcl, t } from '../config/config';
 
 const GET_MARKET_FEE = fcl.cdc`
 import NonFungibleToken from 0xNFTInterface
-import FlowAssets from 0xNFTContract
+import Gaia from 0xNFTContract
 
 // Print the NFTs owned by account.
 // pub fun main(address: Address): [UInt64] {
 pub fun main(address: Address, assetID: UInt64 ): UFix64? {
     let account = getAccount(address)
 
-    let collectionRef = account.getCapability(FlowAssets.CollectionPublicPath)
-                            .borrow<&{FlowAssets.FlowAssetsCollectionPublic}>()!
+    let collectionRef = account.getCapability(Gaia.CollectionPublicPath)
+                            .borrow<&{Gaia.CollectionPublic}>()!
 
-    let asset = collectionRef.borrowFlowAsset(id: assetID)!
+    let asset = collectionRef.borrowGaiaAsset(id: assetID)!
     let setiD = asset.data.setID
-    let marketFee = FlowAssets.getSetMarketFee(setID: setiD)
+    let marketFee = Gaia.getSetMarketFee(setID: setiD)
 
     return marketFee
 }

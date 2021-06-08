@@ -32,7 +32,7 @@ import useBlockPage from '~/hooks/useBlockPage';
 import { GET_DROP_BY_ID } from '~/store/server/subscriptions';
 
 const DropDetails = () => {
-  const { shouldPageBlock } = useBlockPage();
+  const shouldPageBlock = useBlockPage();
   const router = useRouter();
   const {
     query: { id }

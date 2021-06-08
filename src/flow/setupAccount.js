@@ -6,8 +6,8 @@ import Profile from 0xProfile
 import FungibleToken from 0xFungibleToken
 import NonFungibleToken from 0xNFTInterface
 import FlowToken from 0xFlowToken
-import FlowAssets from 0xNFTContract
-import FlowAssetsMarket from 0xNFTMarket
+import Gaia from 0xNFTContract
+import GaiaMarket from 0xNFTMarket
 import FUSD from 0xFUSDContract
 
 // This transaction configures an account to hold assets.
@@ -31,30 +31,30 @@ transaction {
         }
 
         // First, check to see if a moment collection already exists
-        if account.borrow<&FlowAssets.Collection>(from: FlowAssets.CollectionStoragePath) == nil {
-            // create a new FlowAssets Collection
-            let collection <- FlowAssets.createEmptyCollection() as! @FlowAssets.Collection
+        if account.borrow<&Gaia.Collection>(from: Gaia.CollectionStoragePath) == nil {
+            // create a new Gaia Collection
+            let collection <- Gaia.createEmptyCollection() as! @Gaia.Collection
             // Put the new Collection in storage
-            account.save(<-collection, to: FlowAssets.CollectionStoragePath)
+            account.save(<-collection, to: Gaia.CollectionStoragePath)
             // create a public capability for the collection
-            account.link<&{FlowAssets.FlowAssetsCollectionPublic}>(FlowAssets.CollectionPublicPath, target: FlowAssets.CollectionStoragePath)
+            account.link<&{Gaia.CollectionPublic}>(Gaia.CollectionPublicPath, target: Gaia.CollectionStoragePath)
         }
 
-        // Init FlowAssets Market collection
-        if account.borrow<&FlowAssetsMarket.Collection>(from: FlowAssetsMarket.CollectionStoragePath) == nil {
+        // Init Gaia Market collection
+        if account.borrow<&GaiaMarket.Collection>(from: GaiaMarket.CollectionStoragePath) == nil {
 
             // create a new empty collection
-            let collection <- FlowAssetsMarket.createEmptyCollection() as! @FlowAssetsMarket.Collection
+            let collection <- GaiaMarket.createEmptyCollection() as! @GaiaMarket.Collection
             
             // save it to the account
-            account.save(<-collection, to: FlowAssetsMarket.CollectionStoragePath)
+            account.save(<-collection, to: GaiaMarket.CollectionStoragePath)
 
             // create a public capability for market the collection
-            account.link<&FlowAssetsMarket.Collection{FlowAssetsMarket.CollectionPublic}>(FlowAssetsMarket.CollectionPublicPath, target: FlowAssetsMarket.CollectionStoragePath)
+            account.link<&GaiaMarket.Collection{GaiaMarket.CollectionPublic}>(GaiaMarket.CollectionPublicPath, target: GaiaMarket.CollectionStoragePath)
         
             // create a public capability for the collection
-            if !account.getCapability<&FlowAssets.Collection{NonFungibleToken.Provider}>(/private/AssetsCollectionProvider)!.check() {
-              account.link<&FlowAssets.Collection{NonFungibleToken.Provider}>(/private/AssetsCollectionProvider, target: FlowAssets.CollectionStoragePath)
+            if !account.getCapability<&Gaia.Collection{NonFungibleToken.Provider}>(/private/GaiaCollectionProvider)!.check() {
+              account.link<&Gaia.Collection{NonFungibleToken.Provider}>(/private/GaiaCollectionProvider, target: Gaia.CollectionStoragePath)
             }
   
           }
@@ -113,10 +113,7 @@ export async function setupAccount() {
         fcl.authorizations([fcl.authz]), // current user will be first AuthAccount
         fcl.limit(100) // set the compute limit
       ])
-      .then(async a => {
-        console.warn(a);
-        return fcl.decode(a);
-      });
+      .then(fcl.decode);
     notification.open({
       key: `setup_account`,
       icon: <Spin />,
@@ -124,7 +121,6 @@ export async function setupAccount() {
       description: 'Sending transaction to the blockchain',
       duration: null
     });
-    console.warn(fcl.tx(txId).onceSealed());
     return fcl.tx(txId).onceSealed();
   } catch (err) {
     console.warn(err);

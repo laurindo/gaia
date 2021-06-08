@@ -3,14 +3,14 @@ import { Spin, notification } from 'antd';
 import { fcl, t } from '../config/config';
 
 const CANCEL_SALE_TX = fcl.cdc`
-import FlowAssetsMarket from 0xNFTMarket
+import GaiaMarket from 0xNFTMarket
 
 transaction(saleAssetID: UInt64) {
-    let marketCollection: &FlowAssetsMarket.Collection
+    let marketCollection: &GaiaMarket.Collection
 
     prepare(signer: AuthAccount) {
-        self.marketCollection = signer.borrow<&FlowAssetsMarket.Collection>(from: FlowAssetsMarket.CollectionStoragePath)
-            ?? panic("Missing or mis-typed FlowAssetsMarket Collection")
+        self.marketCollection = signer.borrow<&GaiaMarket.Collection>(from: GaiaMarket.CollectionStoragePath)
+            ?? panic("Missing or mis-typed GaiaMarket Collection")
     }
 
     execute {

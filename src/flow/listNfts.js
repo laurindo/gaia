@@ -2,21 +2,21 @@ import { fcl, t } from '../config/config';
 
 const LIST_NFTS_SCRIPT = fcl.cdc`
 import NonFungibleToken from 0xNFTInterface
-import FlowAssets from 0xNFTContract
+import Gaia from 0xNFTContract
 
 // Print the NFTs owned by account.
 // pub fun main(address: Address): [UInt64] {
-pub fun main(address: Address): [&FlowAssets.NFT] {
+pub fun main(address: Address): [&Gaia.NFT] {
     let account = getAccount(address)
 
-    let collectionRef = account.getCapability(FlowAssets.CollectionPublicPath)
-                            .borrow<&{FlowAssets.FlowAssetsCollectionPublic}>()!
+    let collectionRef = account.getCapability(Gaia.CollectionPublicPath)
+                            .borrow<&{Gaia.CollectionPublic}>()!
 
     let ids = collectionRef.getIDs()
-    let assets: [&FlowAssets.NFT] = []
+    let assets: [&Gaia.NFT] = []
 
     for assetID in ids {
-        let asset = collectionRef.borrowFlowAsset(id: assetID)!
+        let asset = collectionRef.borrowGaiaAsset(id: assetID)!
         assets.append(asset)
     }
 

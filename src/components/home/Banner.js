@@ -10,7 +10,7 @@ function Banner() {
   return (
     <>
       <BannerImgContainer>
-        <CustomImg isBanner={true} alt="banner" src="/static/img/home-banner.png" />
+        <CustomImg isBanner alt="banner" src="/static/img/home-banner.png" />
       </BannerImgContainer>
       <BannerStyled>
         <BannerTitle type="secondary">The largest NFT marketplace</BannerTitle>

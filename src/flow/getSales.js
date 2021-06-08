@@ -1,8 +1,8 @@
 import { fcl, t } from '../config/config';
 
 const LIST_NFTS_SCRIPT = fcl.cdc`
-  import FlowAssets from 0xNFTContract
-  import FlowAssetsMarket from 0xNFTMarket
+  import Gaia from 0xNFTContract
+  import GaiaMarket from 0xNFTMarket
 
   pub struct AssetVO {
     pub let id: UInt64
@@ -19,7 +19,7 @@ const LIST_NFTS_SCRIPT = fcl.cdc`
   pub fun main(address: Address): [AssetVO] {
         
     let colectionRef = getAccount(address)
-        .getCapability<&FlowAssetsMarket.Collection{FlowAssetsMarket.CollectionPublic}>(FlowAssetsMarket.CollectionPublicPath).borrow()
+        .getCapability<&GaiaMarket.Collection{GaiaMarket.CollectionPublic}>(GaiaMarket.CollectionPublicPath).borrow()
         ?? panic("Could not borrow capability from public collection")
       if(colectionRef != nil){
         let ids = colectionRef.getSaleOfferIDs()

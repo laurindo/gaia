@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { UserOutlined, CaretDownOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 
+import Price from './Price';
 import {
   Card,
   CardImage,
   AssetDescription as Description,
   Text,
-  PriceContainer,
-  Price,
   ContentContainer,
   StyledAvatar,
   DropDownContainer,
@@ -21,7 +19,6 @@ import { PlaceholderSkeletonImg } from '~/components/shared/CardStyled';
 
 import { getImageURL } from '~/utils/getImageUrl';
 import { getProfile } from '~/flow/getProfile';
-import formatPrice from '~/utils/formatPrice';
 import { URLs } from '~/routes/urls';
 import DropDown from '~/components/dropdown/DropDown';
 
@@ -51,13 +48,42 @@ const Asset = ({
   }, []);
 
   const avatarSource = imageSrc ? { src: imageSrc } : { icon: <UserOutlined /> };
+
+  function getOwner() {
+    if (showOwner && owner) return <StyledAvatar size="small" {...avatarSource} />;
+    return null;
+  }
+
+  function getMintNumber() {
+    if (mintNumber) return <MintNumber>{`#${mintNumber}`}</MintNumber>;
+
+    return null;
+  }
+
+  function getActions() {
+    if (actions && actions.length > 0)
+      return (
+        <DropDownContainer>
+          <DropDown title="actions" options={actions} icon={<CaretDownOutlined />} />
+        </DropDownContainer>
+      );
+
+    return null;
+  }
+
+  function getImageLoading() {
+    if (isImageLoading) return <PlaceholderSkeletonImg shape="square" active />;
+
+    return null;
+  }
+
   const Component = (
     <Card className="token-card">
       <MintNumberContainer justify={showOwner ? 'space-between' : 'end'} align="middle">
-        {showOwner && owner && <StyledAvatar size="small" {...avatarSource} />}
-        {mintNumber && <MintNumber>{`#${mintNumber}`}</MintNumber>}
+        {getOwner()}
+        {getMintNumber()}
       </MintNumberContainer>
-      {isImageLoading && <PlaceholderSkeletonImg shape="square" active />}
+      {getImageLoading()}
       <CardImage
         width={193}
         height={182}
@@ -71,18 +97,9 @@ const Asset = ({
           <Text>{name}</Text>
           <Description ellipsis={{ rows: 2 }}>{description}</Description>
         </ContentContainer>
-        {price && (
-          <PriceContainer>
-            <Image src="/images/flow-black.png" width={20} height={20} object-fit="contain" />
-            <Price>{formatPrice(price)}</Price>
-          </PriceContainer>
-        )}
+        {price && <Price price={price} />}
       </div>
-      {actions && actions.length > 0 && (
-        <DropDownContainer>
-          <DropDown title="actions" options={actions} icon={<CaretDownOutlined />} />
-        </DropDownContainer>
-      )}
+      {getActions()}
     </Card>
   );
 

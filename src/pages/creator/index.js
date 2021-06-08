@@ -15,7 +15,7 @@ import useAuth from '~/hooks/useAuth';
 import useBlockPage from '~/hooks/useBlockPage';
 
 function Collections() {
-  const { shouldPageBlock } = useBlockPage();
+  const shouldPageBlock = useBlockPage();
   const router = useRouter();
   const { user } = useAuth();
 

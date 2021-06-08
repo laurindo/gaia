@@ -6,7 +6,7 @@ import { DropListWrapper, AssetWrapper } from '../../components/drops/styled';
 import useBlockPage from '~/hooks/useBlockPage';
 
 function DropsList() {
-  const { shouldPageBlock } = useBlockPage();
+  const shouldPageBlock = useBlockPage();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

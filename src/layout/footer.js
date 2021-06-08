@@ -76,45 +76,33 @@ function Footer() {
             </Row>
             <Row gutter={25}>
               <Col>
-                <Link href="#">
-                  <a href="about:blank">
-                    <Discord size={25} />
-                  </a>
+                <Link href="#" target="_blank">
+                  <Discord size={25} />
                 </Link>
               </Col>
               <Col>
-                <Link href="#">
-                  <a href="about:blank">
-                    <FacebookSquare size={25} />
-                  </a>
+                <Link href="#" target="_blank">
+                  <FacebookSquare size={25} />
                 </Link>
               </Col>
               <Col>
-                <Link href="#">
-                  <a href="about:blank">
-                    <Telegram size={25} />
-                  </a>
+                <Link href="#" target="_blank">
+                  <Telegram size={25} />
                 </Link>
               </Col>
               <Col>
-                <Link href="#">
-                  <a href="about:blank">
-                    <Twitter size={25} />
-                  </a>
+                <Link href="#" target="_blank">
+                  <Twitter size={25} />
                 </Link>
               </Col>
               <Col>
-                <Link href="#">
-                  <a href="about:blank">
-                    <Signal size={25} />
-                  </a>
+                <Link href="#" target="_blank">
+                  <Signal size={25} />
                 </Link>
               </Col>
               <Col>
-                <Link href="#">
-                  <a href="about:blank">
-                    <Instagram size={25} />
-                  </a>
+                <Link href="#" target="_blank">
+                  <Instagram size={25} />
                 </Link>
               </Col>
             </Row>

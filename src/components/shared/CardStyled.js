@@ -40,9 +40,9 @@ const CardStyled = styled(Card)`
       }
     }
   }
-  margin-bottom: ${props => (props.skeleton ? '20px' : '0')};
-  margin-left: ${props => (props.skeleton ? '10px' : '0')};
-  margin-right: ${props => (props.skeleton ? '10px' : '0')};
+  margin-bottom: ${props => (props.$skeleton ? '20px' : '0')};
+  margin-left: ${props => (props.$skeleton ? '10px' : '0')};
+  margin-right: ${props => (props.$skeleton ? '10px' : '0')};
 `;
 
 export const CardTitleContainer = styled.div`

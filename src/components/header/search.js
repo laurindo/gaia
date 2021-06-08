@@ -12,6 +12,7 @@ import {
 import { useSubscription } from '@apollo/react-hooks';
 import { useRouter } from 'next/router';
 import { GET_NFTS_ON_SALE } from '~/store/server/subscriptions';
+import { getImageURL } from '~/utils/getImageUrl';
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -65,7 +66,7 @@ function Search() {
                 objectFit="contain"
                 width={50}
                 height={50}
-                src={item.nft.template.metadata.image}
+                src={getImageURL(item.nft.template.metadata.image)}
               />
               <DropdownText>{item.nft.template.metadata.name}</DropdownText>
             </Row>

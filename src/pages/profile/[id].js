@@ -13,7 +13,7 @@ import {
 import { SlidersFilled } from '@ant-design/icons';
 import { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useSubscription, useMutation } from '@apollo/react-hooks';
+import { useSubscription } from '@apollo/react-hooks';
 
 import Address from '~/components/address/Address';
 import Card from '~/components/asset/Asset';
@@ -22,7 +22,6 @@ import useAuth from '~/hooks/useAuth';
 import useBlockPage from '~/hooks/useBlockPage';
 
 import { GET_MY_NFTS_BY_OWNER } from '~/store/server/subscriptions';
-import { INSERT_SALE_OFFER } from '~/store/server/mutations';
 
 import { createSaleOffer } from '~/flow/sell';
 import { cancelSale } from '~/flow/cancelSale';
@@ -31,6 +30,7 @@ import { transferNft } from '~/flow/transferNft';
 import { Banner, ProfileWrapper } from '../../components/profile/styled';
 import { CardLoading } from '~/components/skeleton/CardLoading';
 import Seo from '~/components/seo/seo';
+import { checkAndInsertSale } from '~/utils/graphql';
 const { Text } = Typography;
 
 const Profile = () => {
@@ -44,7 +44,7 @@ const Profile = () => {
   const [transferModal, setTransferModalVisible] = useState(false);
   const [destinationAddress, setDestinationAddress] = useState(null);
   const [assets, setAssets] = useState([]);
-  const { shouldPageBlock } = useBlockPage();
+  const shouldPageBlock = useBlockPage();
 
   useEffect(() => {
     shouldPageBlock();
@@ -73,8 +73,6 @@ const Profile = () => {
       setAssets(mappedAssets);
     }
   });
-
-  const [insertSaleOffer] = useMutation(INSERT_SALE_OFFER);
 
   const data = useMemo(() => {
     if (!filter) {
@@ -116,13 +114,8 @@ const Profile = () => {
       });
       // createSaleOffer(ASSET_ID, PRICE, MARKET_FEE, TEMPLATE_ID)
       await createSaleOffer(modalItemId?.asset_id, price, modalItemId?.template_id);
-      insertSaleOffer({
-        variables: {
-          price: price.toFixed(8),
-          nft_id: modalItemId?.id,
-          status: 'active'
-        }
-      });
+      // checkAndInsertSale(ASSET_ID, DATABASE ID, PRICE)
+      await checkAndInsertSale(modalItemId?.asset_id, modalItemId?.id, price);
       notification.open({
         key: `sale_${modalItemId?.asset_id}`,
         type: 'success',
