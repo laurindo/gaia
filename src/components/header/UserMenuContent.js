@@ -79,8 +79,8 @@ function UserMenuContent({ loggedIn }) {
     }
   }
 
-  function handleInputChange(value) {
-    setFormData({ receiver: user?.addr, amount: value });
+  function handleInputChange(e) {
+    setFormData({ receiver: user?.addr, amount: e.target.value });
   }
 
   const handleInitializeProfile = async () => {
