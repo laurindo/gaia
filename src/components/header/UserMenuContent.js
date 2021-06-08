@@ -1,4 +1,4 @@
-import { Menu, Row, Modal, notification, Spin, Input, Form, Col, Button } from 'antd';
+import { Menu, Row, Modal, notification, Spin, Input, InputNumber, Form, Col } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { setupAccount } from '~/flow/setupAccount';
@@ -11,12 +11,15 @@ import { FUSD_FAUCET } from '~/store/server/mutations';
 
 function UserMenuContent({ loggedIn }) {
   const [form] = Form.useForm();
-  const [formData, setFormData] = useState({});
-  // console.log(formData, "formData")
   const { user, logout } = useAuth();
+  const [formData, setFormData] = useState({
+    receiver: '',
+    amount: ''
+  });
   const [modalVisible, setModalVisible] = useState(false);
   const [openModalFlow, setOpenModalFlow] = useState(false);
   const { initialized, hasSetup } = useProfile(user?.addr);
+  const [FUSDfaucet] = useMutation(FUSD_FAUCET);
   const router = useRouter();
 
   const handleGoToEditProfile = async () => {
@@ -29,27 +32,54 @@ function UserMenuContent({ loggedIn }) {
     }
   };
 
-  const handleOpenModalFlowUsd = () => {
-    setOpenModalFlow(true);
+  const handleOpenModalFlowUsd = async () => {
+    const initializedProfile = await initialized();
+    const initializedAccount = await hasSetup();
+    if (initializedProfile && initializedAccount) {
+      setOpenModalFlow(true);
+    } else {
+      setModalVisible(true);
+    }
   };
-  const [fusdFaucet] = useMutation(FUSD_FAUCET);
 
   async function hendleFaucet() {
     try {
-      await fusdFaucet({
+      notification.open({
+        key: `faucet_usd`,
+        icon: <Spin />,
+        message: `Setting up your account`,
+        description: 'Please wait while we process your request.',
+        duration: null
+      });
+      await FUSDfaucet({
         variables: {
-          receiver: formData.address,
+          receiver: formData.receiver,
           amount: formData.amount
         }
       });
+      notification.open({
+        key: `faucet_usd`,
+        type: 'success',
+        message: `You have created template `,
+        description: `Your have successfully transaction to the blockchain`
+      });
     } catch (err) {
-      // console.log(err, "ERRRR");
+      notification.open({
+        key: `faucet_usd`,
+        type: 'error',
+        message: `Error on setup your account`,
+        description: `Your account setup failed, please try again later.`
+      });
+    } finally {
+      setOpenModalFlow(false);
     }
   }
-  hendleFaucet();
-  function handleSubmitFormFlow(value) {
-    setFormData(value);
-    // console.log(value)
+
+  function handleInputChange(value) {
+    setFormData({ receiver: user?.addr, amount: value });
+  }
+  function handleSubmitFormFlow() {
+    hendleFaucet();
   }
 
   const handleInitializeProfile = async () => {
@@ -102,30 +132,30 @@ function UserMenuContent({ loggedIn }) {
       <Modal
         visible={openModalFlow}
         width="800px"
-        onOk={() => setOpenModalFlow(false)}
+        onOk={handleSubmitFormFlow}
         onCancel={() => setOpenModalFlow(false)}
         onRefuse={() => setOpenModalFlow(false)}>
-        <Form form={form} onFinish={handleSubmitFormFlow}>
+        <Form form={form}>
           <Form.Item label="Address" name="address" rules={[{ required: true }]}>
             <Row>
               <Col span={12}>
-                <Input placeholder="input your address" />
+                <Input readOnly={true} defaultValue={user?.addr} placeholder="input your address" />
               </Col>
             </Row>
           </Form.Item>
 
           <Form.Item label="Amount" name="amount" rules={[{ required: true }]}>
             <Row>
-              <Col span={3}>
-                <Input placeholder="input your amount" />
+              <Col span={6}>
+                <InputNumber
+                  min={1}
+                  max={50}
+                  onChange={handleInputChange}
+                  maxLength="2"
+                  placeholder="input your amount"
+                />
               </Col>
             </Row>
-          </Form.Item>
-
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
           </Form.Item>
         </Form>
       </Modal>

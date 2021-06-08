@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const FUSD_FAUCET = gql`
-  mutation fusdFaucet($receiver: String, $amount: bigint) {
-    fusdFaucet(arg1: { amount: $amount, receiver: $receiver }) {
+  mutation FUSDfaucet($receiver: String!, $amount: bigint!) {
+    FUSDfaucet(arg1: { amount: $amount, receiver: $receiver }) {
       errors
     }
   }
