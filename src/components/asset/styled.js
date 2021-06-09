@@ -106,20 +106,44 @@ export const Column = styled(Col)`
   justify-content: center;
 `;
 
+export const ExpandedViewSkeletonText = styled(Skeleton.Input)`
+  height: 12px !important;
+`;
+
 export const ExpandedViewSkeletonParagraph = styled(Skeleton)`
   margin-bottom: 20px;
 `;
 
-export const ExpandedViewSkeletonImage = styled(Skeleton.Input)`
+export const ExpandedViewSkeletonImage = styled(Skeleton.Image)`
   width: 480px !important;
   height: 480px !important;
   border-radius: 8px;
   margin-right: 20px !important;
 `;
 
+export const ExpandedViewSkeletonTitle = styled(Skeleton.Input)`
+  width: 250px !important;
+  height: 22px !important;
+`;
+
 export const ExpandedViewSkeletonInput = styled(Skeleton.Input)`
   width: 200px !important;
   height: 20px !important;
+`;
+
+export const ExpandedViewSkeletonNameInput = styled(Skeleton.Input)`
+  width: 200px !important;
+  height: 18px !important;
+`;
+
+export const ExpandedViewSkeletonCreatorInput = styled(Skeleton.Input)`
+  width: 110px !important;
+  height: 10px !important;
+`;
+
+export const ExpandedViewSkeletonInfoInput = styled(Skeleton.Input)`
+  /* width: 110px !important; */
+  height: 10px !important;
 `;
 
 export const ExpandedViewSkeletonButton = styled(Skeleton.Button)`
