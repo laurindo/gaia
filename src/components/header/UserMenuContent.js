@@ -1,4 +1,4 @@
-import { Menu, Row, Modal, notification, Spin, Input, InputNumber, Form, Col } from 'antd';
+import { Menu, Row, Modal, notification, Spin } from 'antd';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { setupAccount } from '~/flow/setupAccount';
@@ -6,79 +6,23 @@ import useAuth from '~/hooks/useAuth';
 import useProfile from '~/hooks/useProfile';
 import { URLs } from '~/routes/urls';
 import { ColStyled } from '~/components/header/styled';
-import { useMutation } from '@apollo/react-hooks';
-import { FUSD_FAUCET } from '~/store/server/mutations';
 
 function UserMenuContent({ loggedIn }) {
-  const [form] = Form.useForm();
   const { user, logout } = useAuth();
-  const [formData, setFormData] = useState({
-    receiver: '',
-    amount: ''
-  });
   const [modalVisible, setModalVisible] = useState(false);
-  const [openModalFlow, setOpenModalFlow] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(true);
   const { initialized, hasSetup } = useProfile(user?.addr);
-  const [FUSDfaucet] = useMutation(FUSD_FAUCET);
   const router = useRouter();
 
   const handleGoToEditProfile = async () => {
     const initializedProfile = await initialized();
     const initializedAccount = await hasSetup();
+    console.warn(initializedProfile, initializedAccount);
     if (initializedProfile && initializedAccount) {
       router.push(URLs.editProfile);
     } else {
       setModalVisible(true);
     }
   };
-
-  const handleOpenModalFlowUsd = async () => {
-    const initializedProfile = await initialized();
-    const initializedAccount = await hasSetup();
-    if (initializedProfile && initializedAccount) {
-      setOpenModalFlow(true);
-    } else {
-      setModalVisible(true);
-    }
-  };
-
-  async function handleFaucet() {
-    try {
-      notification.open({
-        key: `faucet_usd`,
-        icon: <Spin />,
-        message: `Setting up your account`,
-        description: 'Please wait while we process your request.',
-        duration: null
-      });
-      await FUSDfaucet({
-        variables: {
-          receiver: formData.receiver,
-          amount: formData.amount
-        }
-      });
-      notification.open({
-        key: `faucet_usd`,
-        type: 'success',
-        message: `You have created template `,
-        description: `Your have successfully transaction to the blockchain`
-      });
-    } catch (err) {
-      notification.open({
-        key: `faucet_usd`,
-        type: 'error',
-        message: `Error on setup your account`,
-        description: `Your account setup failed, please try again later.`
-      });
-    } finally {
-      setOpenModalFlow(false);
-    }
-  }
-
-  function handleInputChange(value) {
-    setFormData({ receiver: user?.addr, amount: value });
-  }
 
   const handleInitializeProfile = async () => {
     try {
@@ -113,7 +57,6 @@ function UserMenuContent({ loggedIn }) {
         <ColStyled span={24}>
           <Menu>
             <Menu.Item onClick={() => handleGoToEditProfile()}>Edit Profile</Menu.Item>
-            <Menu.Item onClick={handleOpenModalFlowUsd}>Flow USD</Menu.Item>
             <Menu.Item onClick={logout}>Logout</Menu.Item>
           </Menu>
         </ColStyled>
@@ -125,42 +68,6 @@ function UserMenuContent({ loggedIn }) {
         onCancel={() => setModalVisible(false)}
         onRefuse={() => setModalVisible(false)}>
         <p>Would you like to initialize it?</p>
-      </Modal>
-
-      <Modal
-        okButtonProps={{ disabled: buttonDisabled }}
-        visible={openModalFlow}
-        width="500px"
-        onOk={handleFaucet}
-        onCancel={() => setOpenModalFlow(false)}
-        onRefuse={() => setOpenModalFlow(false)}>
-        <Form
-          form={form}
-          onFieldsChange={() => {
-            setButtonDisabled(form.getFieldsError().some(field => field.errors.length > 0));
-          }}>
-          <Form.Item label="Address" name="address" rules={[{ required: true }]}>
-            <Row>
-              <Col span={12}>
-                <Input readOnly={true} defaultValue={user?.addr} placeholder="input your address" />
-              </Col>
-            </Row>
-          </Form.Item>
-
-          <Form.Item label="Amount" name="amount" rules={[{ required: true }]}>
-            <Row>
-              <Col span={12}>
-                <InputNumber
-                  min={1}
-                  max={50}
-                  onChange={handleInputChange}
-                  maxLength="2"
-                  placeholder="input your amount"
-                />
-              </Col>
-            </Row>
-          </Form.Item>
-        </Form>
       </Modal>
     </>
   ) : null;

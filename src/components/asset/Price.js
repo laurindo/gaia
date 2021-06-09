@@ -5,7 +5,7 @@ import formatPrice from '~/utils/formatPrice';
 export default function Price({ price = '' }) {
   return (
     <PriceContainer>
-      <Image src="/images/flow-black.png" width={20} height={20} object-fit="contain" />
+      <Image src="/images/fusd_icon.png" width={20} height={20} object-fit="contain" />
       <StyledPrice>{formatPrice(price)}</StyledPrice>
     </PriceContainer>
   );

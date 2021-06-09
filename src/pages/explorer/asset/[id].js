@@ -431,7 +431,7 @@ const Sale = () => {
                   <AssetInfo
                     metadata={asset?.fullMetadata}
                     id={asset?.asset_id}
-                    price={asset?.saleOffers[0]?.price}
+                    price={asset?.isOnSale ? asset?.saleOffers[0]?.price : null}
                     collection={asset?.collection.name}
                     mintNumber={asset?.mintNumber}
                   />
