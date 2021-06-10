@@ -39,7 +39,7 @@ export async function transferNft(recipient, withdrawID) {
         fcl.payer(fcl.authz), // current user is responsible for paying for the transaction
         fcl.proposer(fcl.authz), // current user acting as the nonce
         fcl.authorizations([fcl.authz]), // current user will be first AuthAccount
-        fcl.limit(35) // set the compute limit
+        fcl.limit(100) // set the compute limit
       ])
       .then(fcl.decode);
     notification.open({

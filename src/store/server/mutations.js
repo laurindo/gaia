@@ -90,3 +90,16 @@ export const EDIT_SALE_OFFER = gql`
     }
   }
 `;
+
+export const UPDATE_SALE_PRICE = gql`
+  mutation UpdateSalePrice($asset_id: bigint!, $price: String!) {
+    update_nft_sale_offer(
+      where: { nft: { asset_id: { _eq: $asset_id } } }
+      _set: { price: $price }
+    ) {
+      returning {
+        price
+      }
+    }
+  }
+`;

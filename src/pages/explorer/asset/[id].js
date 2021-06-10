@@ -48,10 +48,11 @@ import { cancelSale } from '~/flow/cancelSale';
 import { getProfile } from '~/flow/getProfile';
 import { buy } from '~/flow/buy';
 import { createSaleOffer } from '~/flow/sell';
+import { editPrice } from '~/flow/editPrice';
 
 import { GET_NFT } from '~/store/server/subscriptions';
 import { checkAndInsertSale } from '~/utils/graphql';
-import { UPDATE_OWNER, INSERT_SALE_OFFER } from '~/store/server/mutations';
+import { UPDATE_OWNER, UPDATE_SALE_PRICE } from '~/store/server/mutations';
 
 const { Text } = Typography;
 
@@ -106,7 +107,10 @@ const Sale = () => {
       });
     }
   });
+
   const [updateOwner] = useMutation(UPDATE_OWNER);
+
+  const [updatePrice] = useMutation(UPDATE_SALE_PRICE);
 
   const description = useMemo(() => {
     if (completeDescription || asset?.description?.length < 330) {
@@ -151,24 +155,32 @@ const Sale = () => {
     }
   };
 
-  //This function handle the edit sale price
+  //This function handles the edit sale price
   const handleEditPrice = async ({ newPrice }) => {
-    // setIsModalLoading(true);
-    // try {
-    //   await changePrice(user?.addr, parseInt(id, 10), Number(newPrice));
-    //   setIsModalLoading(false);
-    //   Modal.success({
-    //     title: 'Price successfully updated!'
-    //   });
-    // } catch (error) {
-    //   setIsModalLoading(false);
-    //   console.warn(error);
-    //   Modal.error({
-    //     message: `Failed to update price`
-    //   });
-    // } finally {
-    //   setEditPriceVisible(false);
-    // }
+    setIsModalLoading(true);
+    try {
+      await editPrice(user?.addr, Number(asset.asset_id), Number(newPrice));
+      await updatePrice({
+        variables: {
+          asset_id: Number(asset.asset_id),
+          price: String(newPrice)
+        }
+      });
+      setIsModalLoading(false);
+
+      notification.success({
+        key: `edit_sale_${asset.asset_id}`,
+        message: `Price successfully updated!`
+      });
+    } catch (error) {
+      setIsModalLoading(false);
+      notification.error({
+        key: `edit_sale_${asset.asset_id}`,
+        message: `Failed to update price`
+      });
+    } finally {
+      setEditPriceVisible(false);
+    }
   };
 
   //This function handle the cancel sale
