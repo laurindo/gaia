@@ -89,7 +89,7 @@ export const UserContainerCenter = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  flex-wrap: ${props => props.wrap && 'wrap'};
+  flex-wrap: ${props => props.$wrap && 'wrap'};
 `;
 export const UserAvatarContainer = styled.div`
   width: 50%;
