@@ -220,14 +220,14 @@ const Sale = () => {
       <>
         {' '}
         <StyledButton
-          margin={true}
+          margin="5px"
           type="primary"
           shape="round"
           onClick={() => setEditPriceVisible(true)}>
           Edit price
         </StyledButton>
         <StyledButton
-          margin={true}
+          margin="5px"
           cancel
           type="danger"
           shape="round"
