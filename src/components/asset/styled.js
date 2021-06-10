@@ -142,7 +142,8 @@ export const ExpandedViewSkeletonCreatorInput = styled(Skeleton.Input)`
 `;
 
 export const ExpandedViewSkeletonInfoInput = styled(Skeleton.Input)`
-  /* width: 110px !important; */
+  margin-top: ${props => (props.$marginTop ? props.$marginTop : 0)};
+  width: ${props => (props.$width ? props.$width : 0)}px;
   height: 10px !important;
 `;
 
@@ -198,8 +199,8 @@ export const StyledButton = styled(Button)`
   background-color: ${({ theme, cancel }) =>
     cancel ? theme.colors.brightRed : theme.colors.brightBlue};
   width: ${({ width }) => width ?? '100%'};
-  margin-top: ${props => props.margin};
-  margin-bottom: ${props => props.margin};
+  margin-top: ${props => (props.$margin ? '5px' : '0px')};
+  margin-bottom: ${props => (props.$margin ? '5px' : '0px')};
 `;
 
 export const InfoHeading = styled.p`

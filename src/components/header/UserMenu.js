@@ -22,7 +22,7 @@ function UserMenu() {
       trigger="hover"
       placement="bottomRight">
       <UserContainerCenter>
-        <UserContainerCenter wrap="wrap">
+        <UserContainerCenter $wrap>
           <UserInfo>{userProfile?.name ?? user?.addr}</UserInfo>
           <UserInfo small> {flowBalance} FLOW</UserInfo>
           <UserBalance small>{fusdBalance} FUSD</UserBalance>

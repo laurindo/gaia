@@ -39,9 +39,7 @@ function MyHeader() {
     <CustomHeader>
       <Row justify="space-between" align="middle" gutter={[20, 0]}>
         <Col>
-          <Link href={URLs.home}>
-            <a href="about:blank">{appName}</a>
-          </Link>
+          <Link href={URLs.home}>{appName}</Link>
         </Col>
         <Col flex="auto">
           <JustifyCenter>
@@ -51,26 +49,18 @@ function MyHeader() {
         <MenuCol>
           <Menu mode="horizontal" selectedKeys={currentRoute}>
             <Menu.Item key="/">
-              <Link href={URLs.home}>
-                <a href="about:blank">Home</a>
-              </Link>
+              <Link href={URLs.home}>Home</Link>
             </Menu.Item>
             <Menu.Item key={URLs.marketplace}>
-              <Link href={URLs.marketplace}>
-                <a href="about:blank">Marketplace</a>
-              </Link>
+              <Link href={URLs.marketplace}>Marketplace</Link>
             </Menu.Item>
             {user?.loggedIn && (
               <Menu.Item key="inventory">
-                <Link href={URLs.profile(user?.addr)}>
-                  <a href="about:blank">Inventory</a>
-                </Link>
+                <Link href={URLs.profile(user?.addr)}>Inventory</Link>
               </Menu.Item>
             )}
             <Menu.Item key={URLs.create}>
-              <Link href={URLs.create}>
-                <a href="about:blank">Create NFT</a>
-              </Link>
+              <Link href={URLs.create}>Create NFT</Link>
             </Menu.Item>
             <Menu.Item key="login">
               <Space align="baseline">

@@ -9,9 +9,10 @@ const UserInfo = ({ src, name, type }) => {
   return (
     <Wrapper>
       <Avatar size="large" {...avatarSource} />
-      <Info>
-        {name} <Role>{type}</Role>
-      </Info>
+      <div>
+        <Info>{name}</Info>
+        <Role>{type}</Role>
+      </div>
     </Wrapper>
   );
 };
