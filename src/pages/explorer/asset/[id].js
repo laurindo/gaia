@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import {
   Modal,
@@ -19,13 +18,14 @@ import { useSubscription, useMutation } from '@apollo/react-hooks';
 
 import {
   ExpandedViewSkeletonButton,
-  ExpandedViewSkeletonImage,
-  ExpandedViewSkeletonInput,
-  ExpandedViewSkeletonParagraph,
+  ExpandedViewSkeletonNameInput,
+  ExpandedViewSkeletonCreatorInput,
+  ExpandedViewSkeletonInfoInput,
+  ExpandedViewSkeletonTitle,
+  ExpandedViewSkeletonText,
   StyledImage,
   StyledImageContainer,
   Heading,
-  OwnerName,
   ReadMore,
   Description,
   StyledButton,
@@ -38,6 +38,7 @@ import {
 import Seo from '~/components/seo/seo';
 import UserInfo from '~/components/userInfo/UserInfo';
 import AssetInfo from '~/components/assetInfo/AssetInfo';
+import OwnedBy from '~/components/ownedBy';
 
 import useAuth from '~/hooks/useAuth';
 import useBalance from '~/hooks/useBalance';
@@ -217,14 +218,14 @@ const Sale = () => {
       <>
         {' '}
         <StyledButton
-          margin={true}
+          $margin
           type="primary"
           shape="round"
           onClick={() => setEditPriceVisible(true)}>
           Edit price
         </StyledButton>
         <StyledButton
-          margin={true}
+          $margin
           cancel
           type="danger"
           shape="round"
@@ -333,7 +334,7 @@ const Sale = () => {
     if (asset?.saleOffers?.length > 0 && user?.addr !== asset?.ownerProfile?.address) {
       return (
         <StyledButton
-          margin
+          $margin
           type="primary"
           shape="round"
           onClick={() => handleBuy(asset?.asset_id)}>
@@ -394,19 +395,31 @@ const Sale = () => {
           <>
             {/* Skeleton */}
             <Column span={6} offset={2}>
-              <ExpandedViewSkeletonImage active />
+              <Skeleton.Button active size={550} />
             </Column>
             <Column span={8} offset={2}>
               <Content>
-                <ExpandedViewSkeletonParagraph active title paragraph={{ rows: 2 }} />
+                <ExpandedViewSkeletonTitle />
                 <Space direction="horizontal">
                   <Skeleton.Avatar active size="large" />
                   <Space direction="vertical">
-                    <ExpandedViewSkeletonInput active size="small" />
-                    <ExpandedViewSkeletonInput active size="small" />
+                    <ExpandedViewSkeletonNameInput active size="small" />
+                    <ExpandedViewSkeletonCreatorInput active size="small" />
                   </Space>
                 </Space>
-                <ExpandedViewSkeletonButton active size="large" shape="round" />
+                <ExpandedViewSkeletonText active />
+                <ExpandedViewSkeletonText active />
+                <ExpandedViewSkeletonText active />
+                <ExpandedViewSkeletonText active />
+                <ExpandedViewSkeletonText active />
+                <ExpandedViewSkeletonText active />
+
+                <ExpandedViewSkeletonInfoInput $width={50} $marginTop={10} active />
+                <ExpandedViewSkeletonInfoInput $width={30} $marginTop={10} active />
+                <ExpandedViewSkeletonInfoInput $width={100} active />
+                <ExpandedViewSkeletonInfoInput $width={90} active />
+                <ExpandedViewSkeletonInfoInput $width={95} active />
+                <ExpandedViewSkeletonButton active size="small" shape="round" />
               </Content>
             </Column>
             {/* End of Skeleton */}
@@ -447,12 +460,11 @@ const Sale = () => {
                     collection={asset?.collection.name}
                     mintNumber={asset?.mintNumber}
                   />
-                  <p>
-                    Owned by{' '}
-                    <Link href={URLs.profile(asset?.ownerProfile?.address)}>
-                      <OwnerName>{asset?.ownerProfile?.name}</OwnerName>
-                    </Link>
-                  </p>
+                  <OwnedBy
+                    title="Owned by"
+                    ownerName={asset?.ownerProfile?.name}
+                    link={URLs.profile(asset?.ownerProfile?.address)}
+                  />
                   {openLightbox && (
                     <Lightbox
                       medium={asset?.imgURL}

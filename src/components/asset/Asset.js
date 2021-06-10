@@ -110,11 +110,9 @@ Asset.propTypes = {
   imgURL: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  id: PropTypes.number,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   price: PropTypes.number,
-  owner: PropTypes.shape({
-    src: PropTypes.string
-  }),
+  owner: PropTypes.string,
   showSell: PropTypes.bool,
   showCancel: PropTypes.bool,
   sell: PropTypes.func,

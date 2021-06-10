@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   display: flex;
-  margin: 5px 0;
+  margin: 5px 0 10px;
 `;
 
 export const Info = styled.p`
@@ -14,4 +14,5 @@ export const Role = styled.p`
   color: ${({ theme }) => theme.colors.lightGray};
   font-size: 12px;
   font-weight: 500;
+  margin: 0 0 0 10px;
 `;
