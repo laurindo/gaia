@@ -336,7 +336,7 @@ const Sale = () => {
     if (asset?.saleOffers?.length > 0 && user?.addr !== asset?.ownerProfile?.address) {
       return (
         <StyledButton
-          margin
+          margin="5px"
           type="primary"
           shape="round"
           onClick={() => handleBuy(asset?.asset_id)}>
