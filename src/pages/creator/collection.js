@@ -66,7 +66,8 @@ const FormComponent = ({ onSubmit, loading }) => {
             {
               required: true,
               message: 'Please insert a description'
-            }
+            },
+            { min: 3, message: 'Description must be minimum 3 characters.' }
           ]}
           labelCol={{ span: 24 }}>
           <StyledTextArea name="description" placeholder="Description" multiline />
@@ -83,7 +84,8 @@ const FormComponent = ({ onSubmit, loading }) => {
                 {
                   required: true,
                   message: 'Please insert a collection name'
-                }
+                },
+                { min: 3, message: 'Collection Name must be minimum 3 characters.' }
               ]}>
               <StyledInput placeholder="Collection Name" />
             </Form.Item>
