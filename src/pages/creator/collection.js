@@ -23,12 +23,15 @@ const FormComponent = ({ onSubmit, loading }) => {
   const [, forceUpdate] = useState({});
   const [form] = Form.useForm();
   const formValues = form.getFieldsValue();
+  const minLength = (value = 1) => value.length >= 3;
 
   const disabled = useMemo(() => {
     const { collectionName, fee, file, description } = formValues;
+    const validateMinLength = minLength(collectionName) && minLength(description);
 
     if (
-      [collectionName, fee, file, description].some(item => item == false || item === undefined)
+      [collectionName, fee, file, description].some(item => item == false || item === undefined) ||
+      !validateMinLength
     ) {
       return true;
     }
@@ -38,7 +41,7 @@ const FormComponent = ({ onSubmit, loading }) => {
 
   return (
     <Col offset={6} span={12}>
-      <Form onBlur={forceUpdate} onFinish={onSubmit} form={form}>
+      <Form onBlur={forceUpdate} onFieldsChange={forceUpdate} onFinish={onSubmit} form={form}>
         <UploadWrapper>
           <Typography.Text>Add a collection image</Typography.Text>
           <Form.Item name="file" trigger={null} shouldUpdate={false}>
