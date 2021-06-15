@@ -107,6 +107,7 @@ export const GET_COLLECTIONS = gql`
       collection_id
       name
       image
+      is_locked
       description
       templates {
         metadata
