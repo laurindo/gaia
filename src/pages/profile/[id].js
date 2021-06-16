@@ -30,7 +30,7 @@ import { transferNft } from '~/flow/transferNft';
 import { Banner, ProfileWrapper } from '../../components/profile/styled';
 import { CardLoading } from '~/components/skeleton/CardLoading';
 import Seo from '~/components/seo/seo';
-import { checkAndInsertSale } from '~/utils/graphql';
+import { cancelSaleOffer, checkAndInsertSale } from '~/utils/graphql';
 const { Text } = Typography;
 
 const Profile = () => {
@@ -142,6 +142,7 @@ const Profile = () => {
         duration: null
       });
       await cancelSale(item?.asset_id);
+      await cancelSaleOffer(item?.asset_id, item?.id); //graphql mutation
       notification.open({
         key: `cancel_sale_${item?.asset_id}`,
         type: 'success',

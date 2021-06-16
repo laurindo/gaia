@@ -52,7 +52,7 @@ import { createSaleOffer } from '~/flow/sell';
 import { editPrice } from '~/flow/editPrice';
 
 import { GET_NFT } from '~/store/server/subscriptions';
-import { checkAndInsertSale } from '~/utils/graphql';
+import { cancelSaleOffer, checkAndInsertSale } from '~/utils/graphql';
 import { UPDATE_OWNER, UPDATE_SALE_PRICE } from '~/store/server/mutations';
 
 const { Text } = Typography;
@@ -196,6 +196,7 @@ const Sale = () => {
         duration: null
       });
       await cancelSale(asset?.asset_id);
+      await cancelSaleOffer(asset?.asset_id, asset?.id); //graphql mutation
       notification.open({
         key: `cancel_sale_${asset?.asset_id}`,
         type: 'success',

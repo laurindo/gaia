@@ -90,6 +90,20 @@ export const EDIT_SALE_OFFER = gql`
     }
   }
 `;
+export const CANCEL_SALE_OFFER = gql`
+  mutation cancelSaleOffer($asset_id: bigint!, $standard: String!) {
+    update_nft_sale_offer(
+      where: { nft: { asset_id: { _eq: $asset_id }, _and: { standard: { _eq: $standard } } } }
+      _set: { status: "finished" }
+    ) {
+      returning {
+        nft {
+          id
+        }
+      }
+    }
+  }
+`;
 
 export const UPDATE_SALE_PRICE = gql`
   mutation UpdateSalePrice($asset_id: bigint!, $price: String!) {

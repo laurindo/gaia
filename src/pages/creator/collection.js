@@ -59,33 +59,35 @@ const FormComponent = ({ onSubmit, loading }) => {
           </Form.Item>
         </UploadWrapper>
         <Form.Item
-          name="description"
+          wrapperCol={{ span: 24 }}
+          name="collectionName"
           shouldUpdate={false}
-          label="Description"
+          label="Collection Name"
+          labelCol={{ span: 24 }}
           rules={[
             {
               required: true,
-              message: 'Please insert a description'
+              min: 3,
+              message: 'Collection Name must be minimum 3 characters'
             }
-          ]}
-          labelCol={{ span: 24 }}>
-          <StyledTextArea name="description" placeholder="Description" multiline />
+          ]}>
+          <StyledInput placeholder="Collection Name" />
         </Form.Item>
         <Row>
           <Col span={19}>
             <Form.Item
-              wrapperCol={{ span: 24 }}
-              name="collectionName"
+              name="description"
               shouldUpdate={false}
-              label="Collection Name"
-              labelCol={{ span: 24 }}
+              label="Description"
               rules={[
                 {
                   required: true,
-                  message: 'Please insert a collection name'
+                  min: 3,
+                  message: 'Description must be minimum  3 characters'
                 }
-              ]}>
-              <StyledInput placeholder="Collection Name" />
+              ]}
+              labelCol={{ span: 24 }}>
+              <StyledTextArea name="description" placeholder="Description" multiline />
             </Form.Item>
           </Col>
           <Col offset={1} span={4}>
