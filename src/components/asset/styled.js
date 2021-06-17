@@ -1,6 +1,21 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { Button, Avatar, Typography, Skeleton, Col, Row } from 'antd';
+import { Button, Avatar, Typography, Skeleton, Col, Row, Image as IMG } from 'antd';
+
+export const EmptyTemplateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const ImageEmptyTemplate = styled(IMG)`
+  width: 250px;
+  height: 250px;
+`;
+
+export const TitleImageEmptyTemplate = styled.h2`
+  color: #757575;
+`;
 
 export const AmountContainer = styled.div`
   display: flex;
